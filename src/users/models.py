@@ -16,4 +16,3 @@ class UserRead(SQLModel):
     id: int
     username: str
     active: bool
-    super_user: bool
