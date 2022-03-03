@@ -11,3 +11,12 @@ def create_user(user: UserCreate, db: Session = Depends(get_session)):
     db.commit()
     db.refresh(user_to_db)
     return user_to_db
+
+def read_user(user_id: int, db: Session = Depends(get_session)):
+    user = db.get(User, user_id)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f'User not found with id: {user_id}'
+        )
+    return user
