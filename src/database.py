@@ -3,7 +3,7 @@ from sqlmodel import SQLModel, Session, create_engine
 sqlite_file_name = "../sqlite.db"
 sqlite_url = f"sqlite:///{sqlite_file_name}"
 
-engine = create_engine(sqlite_url)
+engine = create_engine(sqlite_url, connect_args={'check_same_thread': False})
 
 def create_database():
     SQLModel.metadata.create_all(engine)

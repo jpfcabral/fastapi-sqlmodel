@@ -1,6 +1,6 @@
-from fastapi import Depends, HTTPException, status
-from sqlmodel import Session
 import bcrypt
+from fastapi import Depends, HTTPException, status
+from sqlmodel import Session, select, col
 from database import get_session
 from users.models import User, UserCreate
 
@@ -12,7 +12,7 @@ def create_user(user: UserCreate, db: Session = Depends(get_session)):
     db.refresh(user_to_db)
     return user_to_db
 
-def read_user(user_id: int, db: Session = Depends(get_session)):
+def read_user_by_id(user_id: int, db: Session = Depends(get_session)):
     user = db.get(User, user_id)
     if not user:
         raise HTTPException(
@@ -20,3 +20,6 @@ def read_user(user_id: int, db: Session = Depends(get_session)):
             detail=f'User not found with id: {user_id}'
         )
     return user
+
+def read_user(username: str, db: Session = Depends(get_session)):
+    return db.query(User).where(col(User.username)==username).first()

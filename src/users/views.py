@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlmodel import Session
 from database import get_session
 from users.models import UserCreate, UserRead
-from users.crud import create_user, read_user
+from users.crud import create_user, read_user_by_id
 
 router = APIRouter()
 
@@ -12,4 +12,4 @@ def create_a_user(user: UserCreate, db: Session = Depends(get_session)):
 
 @router.get("/{user_id}", response_model=UserRead)
 def get_a_user(user_id: int, db: Session = Depends(get_session)):
-    return read_user(user_id=user_id, db=db)
+    return read_user_by_id(user_id=user_id, db=db)
