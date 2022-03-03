@@ -14,7 +14,7 @@ class User(SQLModel, table=True):
 
 class UserCreate(SQLModel):
     username: str
-    hashed_password: str
+    password: str
 
 
 class UserRead(SQLModel):
