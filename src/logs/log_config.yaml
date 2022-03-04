@@ -27,3 +27,8 @@ loggers:
     handlers:
       - access
     propagate: no
+  dev:
+    level: DEBUG
+    handlers:
+      - default
+    propagate: no
