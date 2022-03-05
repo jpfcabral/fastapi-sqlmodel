@@ -5,6 +5,8 @@ from database import get_session
 from users.models import User, UserCreate
 
 def create_user(user: UserCreate, db: Session = Depends(get_session)):
+    if read_user(user.username, db=db):
+        raise HTTPException(status_code=409, detail='Username or email conflict')
     hashed_password = bcrypt.hashpw(user.password.encode('utf8'), bcrypt.gensalt())
     user_to_db = User(**user.dict(), hashed_password=hashed_password)
     db.add(user_to_db)
