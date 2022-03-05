@@ -23,5 +23,4 @@ async def generate_token(form_data: OAuth2PasswordRequestForm = Depends(), db: S
 
 @router.get('/', response_model=UserRead)
 def check_auth(token: str = Depends(oauth2_scheme), db: Session = Depends(get_session)):
-    print(token)
     return get_current_user(token=token, db=db)
