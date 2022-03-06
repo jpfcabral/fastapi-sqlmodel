@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlmodel import Session
 
 from auth.helpers import authenticate, create_token, get_current_user
@@ -7,8 +7,6 @@ from database import get_session
 from users.crud import read_user
 from users.models import UserRead
 
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl='/auth/token')
 
 router = APIRouter()
 
@@ -21,6 +19,6 @@ async def generate_token(form_data: OAuth2PasswordRequestForm = Depends(), db: S
 
     return create_token(user=user)
 
-@router.get('/', response_model=UserRead)
-def check_auth(token: str = Depends(oauth2_scheme), db: Session = Depends(get_session)):
-    return get_current_user(token=token, db=db)
+@router.get('/test')
+def check_auth(current_user: UserRead = Depends(get_current_user)):
+    return {'status':'ok'}

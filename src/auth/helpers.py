@@ -1,6 +1,7 @@
 import bcrypt
 import jwt
 from fastapi import Depends, HTTPException
+from fastapi.security import OAuth2PasswordBearer
 from sqlmodel import Session
 from database import get_session
 from users.crud import read_user
@@ -8,6 +9,8 @@ from users.models import User, UserRead
 from config import settings
 from auth.models import Token
 
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl='/auth/token')
 
 def authenticate(username: str, password: str,  db: Session = Depends(get_session)):
     user = read_user(username=username, db=db)
@@ -23,7 +26,7 @@ def create_token(user: User):
 
     return response.dict()
 
-def get_current_user(token: str, db: Session = Depends(get_session)):
+async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_session)):
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, settings.ALGORITHM)
         user = read_user(username=payload['username'], db=db)
